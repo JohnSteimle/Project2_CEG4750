@@ -21,8 +21,6 @@ string aes_encode(string &plain, byte key[], byte iv[])
     if (plain.empty()) {
         cerr << "Error: Plaintext cannot be empty." << endl;
         return "";
-    } else {
-        cout << plain << endl;
     }
 
     try {
