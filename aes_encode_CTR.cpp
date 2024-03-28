@@ -99,6 +99,13 @@ int main(int argc, char * argv[])
     cipher = aes_encode(plain, key, iv);
     file1.close();
     file2.open(argv[2], ios::out);
+    std::string ciphertext_hex = "";
+    CryptoPP::HexEncoder encoder;
+    CryptoPP::StringSink ss_hex(cipher);
+    encoder.Attach(new CryptoPP::Redirector(ss_hex));
+    encoder.Put(reinterpret_cast<const CryptoPP::byte*>(cipher.data()), cipher.size());
+    encoder.MessageEnd();
+    ss_hex.Get((byte*)ciphertext_hex.data(), ciphertext_hex.size());
     file2 << cipher;
     
     file2.close();

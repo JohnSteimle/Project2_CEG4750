@@ -21,21 +21,24 @@ using namespace CryptoPP;
 string aes_decode(string & cipher, byte key[], byte iv[])
 {
     string plain;
-    std::string ciphertext_hex = "";
-    CryptoPP::HexEncoder encoder;
-    CryptoPP::StringSink encoder_sink(cipher);
-    CryptoPP::StringSource encoder_source(cipher, true, new CryptoPP::Redirector(encoder));
-    encoder.Attach(new CryptoPP::Redirector(encoder_sink));
-    encoder.MessageEnd();
+    // std::string ciphertext_hex = "";
+    // CryptoPP::HexEncoder encoder;
+    // CryptoPP::StringSink ss_hex(cipher);
+    // encoder.Attach(new CryptoPP::Redirector(ss_hex));
+    // encoder.Put(reinterpret_cast<const CryptoPP::byte*>(cipher.data()), cipher.size());
+    // encoder.MessageEnd();
+    // ss_hex.Get((byte*)ciphertext_hex.data(), ciphertext_hex.size());
+    // cout << ciphertext_hex << endl;
+    cout << cipher << endl;
     CTR_Mode<AES>::Decryption dec;
     dec.SetKeyWithIV(key, AES::DEFAULT_KEYLENGTH, iv);
-    byte ciphertext_bytes[ciphertext_hex.length()/2];
-    StringSource ss(ciphertext_hex, true, new HexDecoder);
+    byte ciphertext_bytes[cipher.length()/2];
+    StringSource ss(cipher, true, new HexDecoder);
     ss.Detach(new ArraySink(ciphertext_bytes, sizeof(ciphertext_bytes)));
     StreamTransformationFilter stf(dec, new StringSink(plain));
     stf.Put(ciphertext_bytes, sizeof(ciphertext_bytes));
     stf.MessageEnd();
-    
+    cout << plain << endl;
     return plain;
 }
 
